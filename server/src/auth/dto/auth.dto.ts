@@ -1,6 +1,4 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsString } from "class-validator";
-
-
+import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class AuthDto {
   @IsString()
@@ -9,17 +7,16 @@ export class AuthDto {
 
   @IsString()
   @IsNotEmpty()
-   password: string;
+  password: string;
 
-   @IsString()
-   @IsString()
-   email: string;
+  @IsString()
+  @IsString()
+  email: string;
 
-   @IsString()
-   @IsOptional()
-   profilepic?:string;
+  @IsString()
+  @IsOptional()
+  profilepic?: string;
 }
-
 
 export class LoginDto {
   @IsEmail()
@@ -28,10 +25,8 @@ export class LoginDto {
 
   @IsString()
   @IsNotEmpty()
-   password: string;
+  password: string;
 }
-
-
 
 export class UserDto {
   @IsString()
@@ -40,15 +35,13 @@ export class UserDto {
 
   @IsString()
   @IsNotEmpty()
-   password: string;
+  password: string;
 
-   @IsString()
-   @IsString()
-   email: string;
+  @IsString()
+  @IsString()
+  email: string;
 
-   @IsString()
-   @IsOptional()
-   profilepic?:string;
+  @IsString()
+  @IsOptional()
+  profilepic?: string;
 }
-
-

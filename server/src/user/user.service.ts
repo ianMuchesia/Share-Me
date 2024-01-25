@@ -17,5 +17,7 @@ export class UserService {
         if (!user){
             throw new ForbiddenException("Access Denied")
         }
+
+        return {msg:"userupdated"}
     }
 }

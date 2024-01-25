@@ -20,14 +20,16 @@ export class JwtStrategy extends PassportStrategy(
   }
 
 
-  async validate(payload:{sub:string;email:string;}){
+  async validate(payload:{userId:string;email:string;username:string}){
+  
     const user = await this.prisma.user.findUnique({
       where:{
-        id:payload.sub,
+        id:payload.userId,
       }
     })
 
     delete user.password;
+    delete user.internal_id
     return user
   }
 
