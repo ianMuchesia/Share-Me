@@ -13,23 +13,6 @@ export class CreatePostDTO {
 }
 
 
-export class UpdatePostDTO {
-    @IsNotEmpty()
-    @IsString()
-    prompt: string;
-
-
-    @IsNotEmpty()
-    @IsString()
-    image:string;
-}
-
-
-export class GenerateImageDTO {
-    @IsNotEmpty()
-    @IsString()
-    prompt: string;
-}
 
 
 // export class GenereatePromptDTO {

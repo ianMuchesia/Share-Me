@@ -10,37 +10,56 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-
 model User {
-  internal_id        Int      @id @default(autoincrement()) 
-  id       String   @default(dbgenerated("gen_random_uuid()")) @unique 
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  internal_id Int      @id @default(autoincrement()) @map("false")
+  id          String   @unique @default(dbgenerated("gen_random_uuid()"))
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  email      String
+  email      String  @unique
   password   String
   username   String
   profilepic String?
+ 
+
 
   posts Post[]
 
-  @@index([id,internal_id])
+  Vote Vote[]
 
+  @@index([id, internal_id])
+  @@map("users")
 }
 
 model Post {
-  internal_id         Int      @id @default(autoincrement()) 
-  id       String   @default(dbgenerated("gen_random_uuid()")) @unique 
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  internal_id Int      @id @default(autoincrement()) @map("false")
+  id          String   @unique @default(dbgenerated("gen_random_uuid()"))
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  prompt     String
-  image      String
-  user_id    String   
-  user       User     @relation(fields: [user_id], references: [id])
-  @@index([id, user_id,internal_id])
+  prompt String
+  image  String
+  voteCount Int @default(0)
+
+  user_id String
+  user    User   @relation(fields: [user_id], references: [id])
+
+  votes Vote[]
+
+  @@index([id, user_id, internal_id])
+  @@map("posts")
 }
 
+model Vote {
+  internal_id Int    @id @default(autoincrement()) @map("false")
+  id          String @unique @default(dbgenerated("gen_random_uuid()"))
 
+  user_id String
+  post_id String
 
+  user User @relation(fields: [user_id], references: [id])
+  post Post @relation(fields: [post_id], references: [id])
+
+  @@index([id, internal_id])
+  @@map("votes")
+}

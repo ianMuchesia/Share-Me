@@ -5,6 +5,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { UserModule } from './user/user.module';
 import { PostModule } from './post/post.module';
 import { VoteModule } from './vote/vote.module';
+import { ImageModule } from './image/image.module';
 
 @Module({
     imports:[
@@ -16,6 +17,7 @@ import { VoteModule } from './vote/vote.module';
         UserModule,
         PostModule,
         VoteModule,
+        ImageModule,
         
     ]
 })

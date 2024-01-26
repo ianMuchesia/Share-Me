@@ -1,140 +1,139 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreatePostDTO, UpdatePostDTO } from './dto';
+import { CreatePostDTO } from './dto';
+import { ImageService } from 'src/image/image.service';
 
 @Injectable()
 export class PostService {
-    constructor(private prisma: PrismaService){}
+  constructor(
+    private prisma: PrismaService,
+    private image: ImageService,
+  ) {}
 
-   
+  async getAllPosts() {
+    const posts = await this.prisma.post.findMany({
+      include: {
+        user: true,
+      },
+    });
 
-    async getAllPosts() {
-        const posts = await this.prisma.post.findMany({
-            include:{
-                user: true,
-            }
-        })
+    return posts;
+  }
 
-        return posts;
+  async getPostById(postid: string) {
+    const post = await this.prisma.post.findUnique({
+      where: {
+        id: postid,
+      },
+      include: {
+        user: true,
+      },
+    });
+
+    if (!post) {
+      throw new NotFoundException('post not found');
     }
 
-    async getPostById(postid: string) {
-        const post = await this.prisma.post.findUnique({
-            where: {
-                id: postid,
-            },
-            include: {
-                user: true,
-            }
-        })
+    return post;
+  }
 
-        if(!post){
-            throw new NotFoundException("post not found")
-        }
+  async getUserPosts(userid: string) {
+    const posts = await this.prisma.post.findMany({
+      where: {
+        user_id: userid,
+      },
+      include: {
+        user: false,
+      },
+    });
 
-        return post;
+    return posts;
+  }
+
+  async createPost(dto: CreatePostDTO, userid: string) {
+    try {
+      const generatedImage = await this.image.generateImage(dto);
+
+      const azureURL = await this.image.saveImageToAzure(
+        generatedImage,
+        dto.prompt,
+      );
+
+      const newPost = await this.prisma.post.create({
+        data: {
+          ...dto,
+          user_id: userid,
+          image: azureURL,
+        },
+      });
+
+      return newPost;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
+  async updatePost(postid: string, dto: CreatePostDTO, userid: string) {
+    const post = await this.prisma.post.findFirst({
+      where: {
+        id: postid,
+      },
+    });
+
+    if (!post) {
+      throw new NotFoundException(`Post not found`);
     }
 
-    async getUserPosts(userid: string) {
-        const posts = await this.prisma.post.findMany({
-            where: {
-                user_id: userid,
-            },
-            include: {
-                user: false,
-            }
-        })
-
-        return posts;
+    if (post.user_id !== userid) {
+      throw new ForbiddenException(`Access to this resource is forbidden`);
     }
 
-    async createPost(dto:CreatePostDTO, userid: string) {
-        const post = await this.prisma.post.create({
-            data: {
-                ...dto,
-                user: {
-                    connect: {
-                        id: userid,
-                    }
-                }
-            }
-        })
+    const updatedPost = await this.prisma.post.update({
+      where: {
+        id: postid,
+      },
+      data: {
+        ...dto,
+      },
+    });
 
-        return post;
+    return updatedPost;
+  }
+
+  async deletePost(postid: string, userid: string) {
+    const post = await this.prisma.post.findFirst({
+      where: {
+        id: postid,
+      },
+    });
+
+    if (!post) {
+      throw new NotFoundException(`Post not found`);
     }
 
-    async updatePost(postid: string, dto:UpdatePostDTO, userid: string) {
-
-        const post = await this.prisma.post.findFirst({
-            where: {
-                id: postid,
-             
-            }
-        })
-
-
-        if (!post){
-            throw new NotFoundException(`Post not found`);
-        }
-
-        if (post.user_id !== userid) {
-            throw new ForbiddenException(`Access to this resource is forbidden`)
-        }
-        
-        const updatedPost = await this.prisma.post.update({
-            where: {
-                id: postid,
-            },
-            data: {
-              ...dto
-            }
-        })
-
-        return updatedPost;
-
+    if (post.user_id !== userid) {
+      throw new ForbiddenException(`Access to this resource is forbidden`);
     }
 
+    await this.prisma.post.delete({
+      where: {
+        id: postid,
+      },
+    });
+  }
 
-    async deletePost(postid: string, userid: string) {
+  async generateImage(prompt: string) {
+    const url = `https://via.placeholder.com/600/92c952`;
+    return url;
+  }
 
-        const post = await this.prisma.post.findFirst({
-            where: {
-                id: postid,
-             
-            }
-        })
-
-        if (!post){
-            throw new NotFoundException(`Post not found`);
-        }
-
-        if (post.user_id !== userid) {
-           throw new ForbiddenException(`Access to this resource is forbidden`)
-        }
-
-        await this.prisma.post.delete({
-            where: {
-                id: postid,
-            }
-        })
-
-        
-
-
-    }
-
-    async generateImage(prompt: string) {
-        const url = `https://via.placeholder.com/600/92c952`
-        return url;
-    }
-
-    async generatePrompt() {
-        const url = `https://via.placeholder.com/600/92c952`
-        return url;
-    }
-
-
-    
-
-
+  async generatePrompt() {
+    const url = `https://via.placeholder.com/600/92c952`;
+    return url;
+  }
 }

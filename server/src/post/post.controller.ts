@@ -12,7 +12,7 @@ import { PostService } from './post.service';
 import { GetUser } from 'src/auth/decorator';
 import { User } from '@prisma/client';
 import { JwtGuard } from 'src/auth/guard';
-import { CreatePostDTO, GenerateImageDTO } from './dto';
+import { CreatePostDTO } from './dto';
 
 @Controller('posts')
 export class PostController {
@@ -58,7 +58,7 @@ export class PostController {
 
   @UseGuards(JwtGuard)
   @Post('generate')
-  generateImage(@Body() dto: GenerateImageDTO) {
+  generateImage(@Body() dto: CreatePostDTO) {
     return this.postservice.generateImage(dto.prompt);
   }
 
