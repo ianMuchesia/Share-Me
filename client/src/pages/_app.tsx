@@ -6,11 +6,11 @@ import { Provider } from "react-redux";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <Provider store={store}>
+    // <Provider store={store}>
       <Layout>
     <Component {...pageProps} />
     </Layout>
-    </Provider>
+    // </Provider>
 
   )
 }

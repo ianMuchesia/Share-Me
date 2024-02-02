@@ -35,7 +35,7 @@ const NavbarContainer = ({ toggleMenu, isOpen }: Props) => {
 
   return (
     <>
-      <header
+      <div
         className={`flex items-center px-6 md:px-10 bg-black-500/80 lg:px-[50px]  ease-in-out duration-300 ${
           navbar
             ? "h-[70px] shadow-[0_10px_30px_-10px] shadow-shadow-black"
@@ -46,24 +46,24 @@ const NavbarContainer = ({ toggleMenu, isOpen }: Props) => {
           <div className="md:flex-[0.5] flex-initial justify-center items-center">
             <Link href={"/"}>
               <Image
-                className="w-32 cursor-pointer"
-                src="/timeless.png"
+                className=" cursor-pointer"
+                src="/Designer-removebg.png"
                 alt="Timeless Logo"
-                height={100}
-                width={100}
+                height={60}
+                width={60}
               />
             </Link>
           </div>
 
           {/* menu bar */}
-          <div className="">
+          <div className={`md:hidden ${isOpen ? "hidden":"block"}`} onClick={toggleMenu}>
             <CiMenuFries className="text-white text-2xl font-bold" />
           </div>
 
           <DesktopNavbar />
           <MobileNavbar isMenuOpen={isOpen} onToggleMenu={toggleMenu} />
         </nav>
-      </header>
+      </div>
     </>
   );
 };

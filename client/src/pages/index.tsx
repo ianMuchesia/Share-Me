@@ -1,3 +1,4 @@
+import { Hero, ImagePosts, Profiles } from "@/components/home";
 
 
 export default function Home() {
@@ -5,8 +6,16 @@ export default function Home() {
     <main
       
     >
-      <h1>hello world</h1>
-     
+    <div className="gradient-bg-hero">
+
+    </div>
+
+    <div className=" gradient-bg-hero">
+        {/* <Header /> */}
+        <Hero />
+      </div>
+     <ImagePosts/>
+     <Profiles/>
     </main>
   );
 }

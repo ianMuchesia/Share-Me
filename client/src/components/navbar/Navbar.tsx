@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import NavbarContainer from "./NavbarContainer";
 
 const Navbar = () => {
-    const [isOpen, setIsOpen] = useState(true)
+    const [isOpen, setIsOpen] = useState(false)
 
 
     const toggleMenu = ()=>{
