@@ -33,7 +33,7 @@ const UploadImage = (props:UploadImageProps) => {
                   hover:file:bg-[#1d2631]
                   cursor-pointer focus:ring-0 focus:outline-none"
                 onChange={props.changeImage}
-                required
+              
               />
             </label>
     

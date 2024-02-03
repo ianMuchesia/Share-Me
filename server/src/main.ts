@@ -9,6 +9,7 @@ async function bootstrap() {
  
     whitelist: true,
   }));
+  app.enableCors({origin:"*"})
   app.setGlobalPrefix('/api/v1');
   await app.listen(4000);
 }

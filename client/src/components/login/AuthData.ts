@@ -1,14 +1,5 @@
-import { profile } from "console";
 
 export const signupInputs = [
-    {
-        id:1,
-        label: "Email",
-        name: "Email",
-        type: "email",
-        placeholder: "Email",
-        value: "",
-    },
     {
         id:2,
         label:"name",
@@ -17,6 +8,15 @@ export const signupInputs = [
         placeholder:"Name",
         value:"",
     },
+    {
+        id:1,
+        label: "Email",
+        name: "Email",
+        type: "email",
+        placeholder: "Email",
+        value: "",
+    },
+ 
     {
         id:3,
         label:"password",

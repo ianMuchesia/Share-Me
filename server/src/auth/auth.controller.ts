@@ -9,7 +9,9 @@ export class AuthController {
     @Post('register')
     signup(@Body() dto:AuthDto)
     {
-        return this.authService.signup(dto)
+        console.log(dto)
+        return {message: 'User registered successfully'}
+        // return this.authService.signup(dto)
     }
 
     @Post('login')

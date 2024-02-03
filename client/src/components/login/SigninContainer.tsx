@@ -1,7 +1,5 @@
 import Link from "next/link"
 import GoogleAuth from "./GoogleAuth"
-import InputForm from "./InputForm"
-import { signinInputs } from "@/lib/AuthData"
 
 const SigninContainer = () => {
   return (
@@ -15,12 +13,7 @@ const SigninContainer = () => {
          <h1 className="text-3xl font-bold">Welcome Back</h1>
         </div>
         <div className="mt-5">
-            {
-                signinInputs.map((input)=>(
-                    <InputForm key={input.id} placeholder={input.placeholder} type={input.type} value={input.value} name={input.name} label={input.label}/>
-                ))
-            }
-         
+          
         
         
         </div>
