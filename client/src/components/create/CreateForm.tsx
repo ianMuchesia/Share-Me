@@ -1,19 +1,56 @@
+import { CreatePostType } from '@/@types/post';
+import { closeModal, openModal } from '@/store/features/modalSlice';
+import { useAppDispatch } from '@/store/hooks';
+import { useCreatePostMutation } from '@/store/services/postApi';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 const CreateForm = () => {
 
+  const dispatch = useAppDispatch()
+
+  const router = useRouter()
+
+  const [handlePost, { isLoading}] = useCreatePostMutation()
+
+
+
+  const {register,handleSubmit,formState:{errors},reset} = useForm<CreatePostType>({
+    defaultValues:{
+      title: '',
+      prompt: '',
+      token: ''
+    }
+  })
+
+
+  const onSubmit = async(data:CreatePostType) => {
+    try {
+      const response = await handlePost(data).unwrap()
+
+      dispatch(openModal({name:"generate",data:response}))
+      setTimeout(()=>{
+        dispatch(closeModal())
+        router.push("/")
+
+      },2000)
+      
+    } catch (error) {
+      console.error(error)
+      toast.error("An error occured")
+    }
+  }
+  
+  
+
   
   return (
-    <form className="flex flex-col">
+    <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-row gap-10 justify-between items-center">
             <p className="font-semibold text-gray-400 text-2xl">Generate Image</p>
-            {/* <button
-              type="button"
-              onClick={closeModal}
-              className="border-0 bg-transparent focus:outline-none"
-            >
-              <FaTimes className="text-gray-400" />
-            </button> */}
+       
           </div>
 
           <div className="flex flex-row justify-start items-center rounded-xl mt-5">
@@ -49,6 +86,8 @@ const CreateForm = () => {
               className="block w-full text-sm
                 text-slate-500 bg-transparent border-0
                 focus:outline-none focus:ring-0"
+                {...register('title',{required:true})}
+
               type="text"
               name="title"
               placeholder="Title"
@@ -56,6 +95,7 @@ const CreateForm = () => {
               // value={title}
               required
             />
+           {errors.title && <p className="text-red-500 text-xs">Title is required</p>}
           </div>
 
          
@@ -72,6 +112,7 @@ const CreateForm = () => {
               // value={description}
               required
             ></textarea>
+            {errors.prompt && <p className="text-red-500 text-xs">Prompt is required</p>}
           </div>
 
           <button

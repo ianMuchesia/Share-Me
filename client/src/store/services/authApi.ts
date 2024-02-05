@@ -3,12 +3,19 @@ import { baseUrl } from "@/lib/BaseURL";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 
-export const api = createApi({
+export const authApi = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl:`${baseUrl}`,
+        prepareHeaders:(headers)=>{
+            const token = localStorage.getItem('token')
+            if(token){
+                headers.set('Authorization',`Bearer ${token}`)
+            }
+            return headers
+        }
 
     }),
-    reducerPath:"apis",
+    reducerPath:"authApis",
     tagTypes:['auth'],
     endpoints:(build)=>({
         login:build.mutation({
@@ -46,4 +53,4 @@ export const api = createApi({
 
 })
 
-export const {useRegisterMutation,useLoginMutation,useLogoutQuery,useMeQuery} = api
+export const {useRegisterMutation,useLoginMutation,useLogoutQuery,useMeQuery} = authApi

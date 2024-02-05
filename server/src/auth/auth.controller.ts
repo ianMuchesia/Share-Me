@@ -17,6 +17,8 @@ export class AuthController {
     @Post('login')
     signin(@Body() dto:LoginDto)
     {
-        return this.authService.login(dto)
+        console.log(dto)
+        return { message: 'User logged in successfully'}
+        // return this.authService.login(dto)
     }
 }

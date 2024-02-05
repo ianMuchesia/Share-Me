@@ -1,4 +1,9 @@
+import { PostType } from "@/@types/post"
+import { IoIosThumbsUp } from "react-icons/io";
 
+interface ImagePostsCardProps {
+  post:PostType;
+}
 const ImagePostsCard = () => {
   return (
     <div className="w-full shadow-xl shadow-black rounded-md overflow-hidden bg-gray-800 my-2 p-3">
@@ -8,12 +13,14 @@ const ImagePostsCard = () => {
       alt={"picture"}
       className="h-60 w-full object-cover shadow-lg shadow-black rounded-lg mb-3"
     />
-    <h4 className="text-white font-semibold">title</h4>
+    <h4 className="text-white font-semibold">Prompt</h4>
     <p className="text-gray-400 text-xs my-1">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quasi, consequatur.</p>
     <div className="flex justify-between items-center mt-3 text-white">
       <div className="flex flex-col">
-        {/* <small className="text-xs">{new Date().getFullYear()}</small> */}
-        <p className="text-sm font-semibold">0.0001 Likes</p>
+      <p className="text-sm font-semibold"><IoIosThumbsUp size={20}/>
+ 0.0001</p>
+        <small className="text-xs">{new Date().getFullYear()}</small>
+       
       </div>
 
       <button

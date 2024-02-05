@@ -1,16 +1,24 @@
-import { useState } from "react";
+import { closeModal } from "@/store/features/modalSlice";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { FaTimes } from "react-icons/fa";
-// import Identicon from 'react-identicons'
 
 const GeneratedPost = () => {
-   
+  const dispatch = useAppDispatch();
 
-    const handleClose = () => { }
+  const modal = useAppSelector((state) => state.modal);
+
+  const { image, description, title, createdAt, votes } = modal.data || {};
+
+  const handleClose = () => {
+    dispatch(closeModal());
+  };
   return (
     <div
-      className={`fixed top-0 left-0 w-screen h-screen flex items-center
+      className={`fixed top-0 left-0 w-screen h-screen ${
+        modal.name === "generated" && modal.isOpen ? "flex" : "hidden"
+      }  items-center
         justify-center bg-black bg-opacity-50 transform
-        transition-transform duration-300 `}
+        transition-transform duration-300  `}
     >
       <div className="bg-[#151c25] shadow-xl shadow-[#e32970] rounded-xl w-11/12 md:w-2/5 h-7/12 p-6">
         <div className="flex flex-col">
@@ -19,6 +27,7 @@ const GeneratedPost = () => {
             <button
               type="button"
               className="border-0 bg-transparent focus:outline-none"
+              onClick={handleClose}
             >
               <FaTimes className="text-gray-400" />
             </button>
@@ -28,17 +37,14 @@ const GeneratedPost = () => {
             <div className="shrink-0 rounded-xl overflow-hidden h-40 w-40">
               <img
                 className="h-full w-full object-cover cursor-pointer"
-                src="https://images.cointelegraph.com/images/1434_aHR0cHM6Ly9zMy5jb2ludGVsZWdyYXBoLmNvbS91cGxvYWRzLzIwMjEtMDYvNGE4NmNmOWQtODM2Mi00YmVhLThiMzctZDEyODAxNjUxZTE1LmpwZWc=.jpg"
+                src={image}
               />
             </div>
           </div>
 
           <div className="flex flex-col justify-start rounded-xl mt-5">
             <h4 className="text-white font-semibold">Prompt</h4>
-            <p className="text-gray-400 text-xs my-1">
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-              Repellendus, eligendi.
-            </p>
+            <p className="text-gray-400 text-xs my-1">{description}</p>
 
             <div className="flex justify-between items-center mt-3 text-white">
               <div className="flex justify-start items-center">
@@ -55,7 +61,7 @@ const GeneratedPost = () => {
 
               <div className="flex flex-col">
                 <small className="text-xs">Current Likes</small>
-                <p className="text-sm font-semibold self-end">0</p>
+                <p className="text-sm font-semibold self-end">{votes}</p>
               </div>
             </div>
           </div>
@@ -69,10 +75,11 @@ const GeneratedPost = () => {
               hover:bg-transparent hover:text-white
               hover:border hover:border-[#bd255f]
               focus:outline-none focus:ring mt-5"
+              onClick={handleClose}
             >
               Close
             </button>
-            ) 
+            )
           </div>
         </div>
       </div>

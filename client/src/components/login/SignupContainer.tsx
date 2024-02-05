@@ -7,7 +7,7 @@ import { RegisterType } from "@/@types/auth";
 import Input from "./Input";
 import PasswordInput from "./PasswordInput";
 import { signupInputs } from "./AuthData";
-import { useRegisterMutation } from "@/store/services/Api";
+import { useRegisterMutation } from "@/store/services/authApi";
 import { toast } from "react-toastify";
 
 const SignupContainer = () => {
