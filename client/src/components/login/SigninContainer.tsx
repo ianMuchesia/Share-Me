@@ -7,8 +7,14 @@ import { toast } from "react-toastify";
 import Input from "./Input";
 import { signinInputs } from "./AuthData";
 import PasswordInput from "./PasswordInput";
+import { useRouter } from "next/router";
+import { useAppDispatch } from "@/store/hooks";
+import { login } from "@/store/features/authSlice";
 
 const SigninContainer = () => {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+
   const {
     register,
     handleSubmit,
@@ -25,32 +31,43 @@ const SigninContainer = () => {
   const onSubmit = async (data: LoginType) => {
     try {
       const res = await handleLogin(data).unwrap();
-      console.log(res);
-    } catch (error) {
-      console.log(error);
-      toast.error("An error occurred");
+
+      dispatch(login({ isAuthenticated: true, user: res }));
+      localStorage.setItem("token", JSON.stringify(res));
+
+      toast.success("Sign in was successful");
+      router.push("/");
+    } catch (error: any) {
+      if (error?.data?.message) {
+        toast.error(error?.data?.message);
+      } else {
+        toast.error("Something went wrong");
+      }
     }
   };
   return (
     <div className="gradient-bg-artworks p-10">
       <div className="relative py-3 sm:max-w-xl sm:mx-auto">
-        <form onSubmit={handleSubmit(onSubmit)} className="relative px-4 py-10 bg-gray-800 opacity-90 mx-8 md:mx-0 shadow rounded-3xl sm:p-10">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="relative px-4 py-10 bg-gray-800 opacity-90 mx-8 md:mx-0 shadow rounded-3xl sm:p-10"
+        >
           <div className="max-w-md mx-auto text-white">
             <div className="flex items-center space-x-5 justify-center">
               <h1 className="text-3xl font-bold">Welcome Back</h1>
             </div>
             <div className="mt-5">
               <Input
-              register={register}
-              registerName="email"
-              input={signinInputs[0]}
-              error={errors.email}
+                register={register}
+                registerName="email"
+                input={signinInputs[0]}
+                error={errors.email}
               />
               <PasswordInput
-              register={register}
-              registerName="password"
-              input={signinInputs[1]}
-              error={errors.password}
+                register={register}
+                registerName="password"
+                input={signinInputs[1]}
+                error={errors.password}
               />
             </div>
             <div className="text-right mb-4">

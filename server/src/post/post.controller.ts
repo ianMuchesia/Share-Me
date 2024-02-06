@@ -28,6 +28,10 @@ export class PostController {
   getUserPosts(@GetUser() user: User) {
     return this.postservice.getUserPosts(user.id);
   }
+  @Get('user/:id')
+  getOtherUserPosts(@Param('id') id: string) {
+    return this.postservice.getOtherUserPosts(id);
+  }
 
   @Get(':id')
   getPostById(@Param('id') id: string) {

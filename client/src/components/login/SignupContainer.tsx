@@ -9,8 +9,14 @@ import PasswordInput from "./PasswordInput";
 import { signupInputs } from "./AuthData";
 import { useRegisterMutation } from "@/store/services/authApi";
 import { toast } from "react-toastify";
+import { useRouter } from "next/router";
+import { useAppDispatch } from "@/store/hooks";
+import { login } from "@/store/features/authSlice";
 
 const SignupContainer = () => {
+  const router = useRouter();
+
+  const dispatch = useAppDispatch()
   //react-hook-form
   const {
     register,
@@ -25,7 +31,7 @@ const SignupContainer = () => {
     },
   });
 
-  const [handleRegister,{isLoading,error}] = useRegisterMutation()
+  const [handleRegister, { isLoading, error }] = useRegisterMutation();
 
   const [imgBase64, setImgBase64] = useState<null | string>(null);
   const [fileUrl, setFileUrl] = useState("");
@@ -47,17 +53,21 @@ const SignupContainer = () => {
     }
   };
 
-  const onSubmit = async(data: RegisterType) => {
-    
+  const onSubmit = async (data: RegisterType) => {
     try {
+      const res = await handleRegister(data).unwrap();
+      
+      dispatch(login({ isAuthenticated: true, user: res }));
+      localStorage.setItem("token", JSON.stringify(res));
 
-      const res = await handleRegister(data).unwrap()
-      console.log(res)
-      
-    } catch (error) {
-      console.log(error)
-      toast.error("An error occurred")
-      
+      toast.success("Sign up was successful");
+      router.push("/");
+    } catch (error: any) {
+      if (error?.data?.message) {
+        toast.error(error?.data?.message);
+      } else {
+        toast.error("Something went wrong");
+      }
     }
   };
 

@@ -6,6 +6,7 @@ import {
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreatePostDTO } from './dto';
 import { ImageService } from 'src/image/image.service';
+import { Exclude } from 'class-transformer';
 
 @Injectable()
 export class PostService {
@@ -17,10 +18,17 @@ export class PostService {
   async getAllPosts() {
     const posts = await this.prisma.post.findMany({
       include: {
-        user: true,
+        user: {
+          select: {
+            id: true, 
+           username: true,
+                   
+           
+          }
+        }
       },
     });
-
+  
     return posts;
   }
 
@@ -30,7 +38,14 @@ export class PostService {
         id: postid,
       },
       include: {
-        user: true,
+        user: {
+          select: {
+            id: true, 
+           username: true,
+                   
+           
+          }
+        }
       },
     });
 
@@ -47,7 +62,14 @@ export class PostService {
         user_id: userid,
       },
       include: {
-        user: false,
+        user: {
+          select: {
+            id: true, 
+           username: true,
+                   
+           
+          }
+        }
       },
     });
 
@@ -71,7 +93,16 @@ export class PostService {
         },
       });
 
-      return newPost;
+      return {
+        id: newPost.id,
+        createdAt: newPost.createdAt,
+        updatedAt: newPost.updatedAt,
+        prompt: newPost.prompt,
+        image: newPost.image,
+        voteCount: newPost.voteCount,
+
+      };
+      
     } catch (error) {
       console.log(error);
       throw error;
@@ -127,6 +158,25 @@ export class PostService {
     });
   }
 
+  async getOtherUserPosts(userid: string) {
+    const posts = await this.prisma.post.findMany({
+      where: {
+        user_id: userid,
+      },
+      include: {
+        user: {
+          select: {
+            id: true, 
+           username: true,
+                   
+           
+          }
+        }
+      },
+    });
+
+    return posts;
+  }
   async generateImage(prompt: string) {
     const url = `https://via.placeholder.com/600/92c952`;
     return url;

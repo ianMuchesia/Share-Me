@@ -1,3 +1,4 @@
+import { PostType } from "@/@types/post";
 import { baseUrl } from "@/lib/BaseURL";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
@@ -26,37 +27,37 @@ export const postApi = createApi({
             }),
             invalidatesTags:['post']
         }),
-        getPosts:build.query({
+        getPosts:build.query<PostType[],void>({
             query:()=>({
-                url:'post',
+                url:'posts',
                 method:'GET'
             }),
             providesTags:['post']
         }),
         getSinglePost:build.query({
             query:(id)=>({
-                url:`post/${id}`,
+                url:`posts/${id}`,
                 method:'GET'
             }),
             providesTags:['post']
         }),
         getUserPosts:build.query({
             query:(id)=>({
-                url:`post/user/${id}`,
+                url:`posts/user/${id}`,
                 method:'GET'
             }),
             providesTags:['post']
         }),
         deletePost:build.mutation({
             query:(id)=>({
-                url:`post/${id}`,
+                url:`posts/${id}`,
                 method:'DELETE'
             }),
             invalidatesTags:['post']
         }),
         updatePost:build.mutation({
             query:(data)=>({
-                url:`post/${data.id}`,
+                url:`posts/${data.id}`,
                 method:'PUT',
                 body:data
             }),
@@ -64,7 +65,7 @@ export const postApi = createApi({
         }),
         votePost:build.mutation({
             query:(data)=>({
-                url:`post/vote/${data.id}`,
+                url:`posts/vote/${data.id}`,
                 method:'POST',
                 body:data
             }),
@@ -72,7 +73,7 @@ export const postApi = createApi({
         }),
         unVotePost:build.mutation({
             query:(data)=>({
-                url:`post/unvote/${data.id}`,
+                url:`posts/unvote/${data.id}`,
                 method:'POST',
                 body:data
             }),

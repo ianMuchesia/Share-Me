@@ -25,6 +25,14 @@ export type UserType = {
 }
 
 export type AccessTokenType = {
-    accessToken: string;
-    user: UserType;
+    access_token: string;
+    email: string;
+    username: string;
+    profileImg: string|null;
+}
+
+
+export type UserMeType ={
+    email:string;
+    username:string;
 }

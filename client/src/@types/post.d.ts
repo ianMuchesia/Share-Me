@@ -1,22 +1,28 @@
+export type CreatePostType = {
+  prompt: string;
+  title?: string;
+  token: string;
+};
 
 export type PostType = {
-    id: number;
-    title: string;
-    description: string;
-    image: string;
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  prompt: string;
+  image: string;
+  voteCount: number;
+  user_id: string;
+  user: {
+    id: string;
     username: string;
-    createdAt: string;
-    updatedAt: string;
-    votes: number;
-    
-}
+  };
+};
 
-
-export type CreatePostType = {
-    prompt: string;
-    title?:string;
-    token: string;
-
-}
-
-
+export type NewPost = {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  prompt: string;
+  image: string;
+  voteCount: number;
+};

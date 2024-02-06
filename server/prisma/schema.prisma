@@ -19,6 +19,7 @@ model User {
   email      String  @unique
   password   String
   username   String
+  description String?
   profilepic String?
  
 
