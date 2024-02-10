@@ -6,6 +6,7 @@ import {
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreatePostDTO } from './dto';
 import { ImageService } from 'src/image/image.service';
+import { Exclude } from 'class-transformer';
 
 @Injectable()
 export class PostService {
@@ -17,7 +18,16 @@ export class PostService {
   async getAllPosts() {
     const posts = await this.prisma.post.findMany({
       include: {
-        user: true,
+        user: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
+        
+      },
+      orderBy: {
+        createdAt: 'desc',
       },
     });
 
@@ -30,7 +40,12 @@ export class PostService {
         id: postid,
       },
       include: {
-        user: true,
+        user: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
       },
     });
 
@@ -47,7 +62,15 @@ export class PostService {
         user_id: userid,
       },
       include: {
-        user: false,
+        user: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
       },
     });
 
@@ -71,7 +94,14 @@ export class PostService {
         },
       });
 
-      return newPost;
+      return {
+        id: newPost.id,
+        createdAt: newPost.createdAt,
+        updatedAt: newPost.updatedAt,
+        prompt: newPost.prompt,
+        image: newPost.image,
+        voteCount: newPost.voteCount,
+      };
     } catch (error) {
       console.log(error);
       throw error;
@@ -127,6 +157,39 @@ export class PostService {
     });
   }
 
+  async getOtherUserPosts(userid: string) {
+    try {
+      const posts = await this.prisma.post.findMany({
+        where: {
+          user_id: userid,
+        },
+     
+        select:{
+          id:true,
+          prompt:true,
+          image:true,
+          voteCount:true,
+          createdAt:true,
+          updatedAt:true,
+          user:{
+            select:{
+              id:true,
+              username:true
+            }
+          }
+        }
+       
+      });
+
+      return posts;
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException('User not found');
+      } else {
+        throw new Error('Something went wrong');
+      }
+    }
+  }
   async generateImage(prompt: string) {
     const url = `https://via.placeholder.com/600/92c952`;
     return url;

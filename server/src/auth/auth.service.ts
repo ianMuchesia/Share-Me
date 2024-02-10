@@ -6,6 +6,7 @@ import { AuthDto, LoginDto } from './dto/auth.dto';
 import * as argon from 'argon2';
 import { User } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { ImageService } from 'src/image/image.service';
 
 @Injectable({})
 export class AuthService {
@@ -13,20 +14,30 @@ export class AuthService {
     private prisma: PrismaService,
     private jwt: JwtService,
     private config: ConfigService,
+    private imageService: ImageService,
   ) {}
 
   async signup(dto: AuthDto) {
     try {
       const hashedPassword = await argon.hash(dto.password);
 
+      let profilepic = null;
 
-      
+      //azure function expects a base64 string inside an object of name body.image
+      if (dto.profilepic) {
+        const body = { image: dto.profilepic };
+
+        profilepic = await this.imageService.saveImageToAzure(
+          body,
+          dto.username,
+        );
+      }
 
       const user = await this.prisma.user.create({
         data: {
           ...dto,
           password: hashedPassword,
-         
+          profilepic,
         },
       });
 
@@ -54,7 +65,6 @@ export class AuthService {
         throw new BadRequestException('Invalid credentials');
       }
 
-     
       const validPassword = await argon.verify(user.password, dto.password);
 
       if (!validPassword) {
@@ -65,7 +75,6 @@ export class AuthService {
     } catch (error) {
       console.log(error);
       throw error;
-      
     }
   }
 

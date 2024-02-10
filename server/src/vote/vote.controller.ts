@@ -15,14 +15,14 @@ import { GetUser } from 'src/auth/decorator';
 export class VoteController {
   constructor(private voteService: VoteService) {}
 
-  @Post(':id')
   @UseGuards(JwtGuard)
+  @Post(':id')
   async createVote(@GetUser() user: User, @Param('id') postId: string) {
     return this.voteService.createVote(user.id, postId);
   }
-
-  @Delete(':id')
+  
   @UseGuards(JwtGuard)
+  @Delete(':id')
   async undoVote(@GetUser() user: User, @Param('id') postId: string) {
     return this.voteService.undoVote(user.id, postId);
   }

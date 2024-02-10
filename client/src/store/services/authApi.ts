@@ -1,17 +1,26 @@
-import { AccessTokenType, RegisterType } from "@/@types/auth";
+import { AccessTokenType, LoginType, RegisterType, UserMeType } from "@/@types/auth";
 import { baseUrl } from "@/lib/BaseURL";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 
-export const api = createApi({
+export const authApi = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl:`${baseUrl}`,
+        prepareHeaders:(headers)=>{
+            const token = localStorage.getItem('token')
+            if(token){
+                const accessToken = JSON.parse(token) as AccessTokenType
+
+                headers.set('Authorization',`Bearer ${accessToken.access_token}`)
+            }
+            return headers
+        }
 
     }),
-    reducerPath:"apis",
+    reducerPath:"authApis",
     tagTypes:['auth'],
     endpoints:(build)=>({
-        login:build.mutation({
+        login:build.mutation<AccessTokenType, LoginType>({
             query:(data)=>({
                 url:'auth/login',
                 method:'POST',
@@ -34,16 +43,16 @@ export const api = createApi({
             }),
             providesTags:['auth']
         }),
-        me:build.query({
+        getme:build.query<UserMeType,void>({
             query:()=>({
-                url:'auth/me',
+                url:'users/me',
                 method:'GET'
             }),
             providesTags:['auth']
-        })
-
+        }),
+      
     })
 
 })
 
-export const {useRegisterMutation,useLoginMutation,useLogoutQuery,useMeQuery} = api
+export const {useRegisterMutation,useLoginMutation,useLogoutQuery,useGetmeQuery} = authApi

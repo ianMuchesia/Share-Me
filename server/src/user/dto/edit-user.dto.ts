@@ -7,4 +7,19 @@ export class EditUser{
     @IsNotEmpty()
     profilepic:string;
 
+    @IsString()
+    @IsNotEmpty()
+    description:string;
+
+    @IsString()
+    @IsNotEmpty()
+    username:string;
+
+    @IsString()
+    @IsNotEmpty()
+    email:string;
+
+  
+
+
 }

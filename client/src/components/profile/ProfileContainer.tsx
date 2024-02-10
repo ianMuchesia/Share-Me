@@ -1,7 +1,9 @@
 import OtherPosts from "./OtherPosts";
 import ProfileCard from "./ProfileCard";
 
+
 const ProfileContainer = () => {
+  
   return (
     <div className="gradient-bg-hero ">
       <div className="profile-page">
@@ -14,7 +16,7 @@ const ProfileContainer = () => {
           >
             <span
               id="blackOverlay"
-              className="w-full h-full absolute opacity-90 bg-black"
+              className="w-full h-full absolute opacity-80 bg-black"
             ></span>
           </div>
           <div
@@ -22,11 +24,12 @@ const ProfileContainer = () => {
             style={{ transform: "translateZ(0px)" }}
           ></div>
         </div>
-        <ProfileCard />
-        <OtherPosts />
+        {/* <ProfileCard />
+        <OtherPosts /> */}
       </div>
     </div>
   );
 };
+
 
 export default ProfileContainer;
