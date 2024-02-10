@@ -62,7 +62,12 @@ export class ImageService {
         this.containerName,
       );
 
-      const blobName = `${prompt.slice(12).trim()}.png`;
+      let blobName = `${prompt}.png`
+      if( prompt.length > 12){
+        blobName = `${prompt.slice(12).trim()}.png`;
+      }
+
+   
 
       const blockBlobClient = containerClient.getBlockBlobClient(blobName);
 
@@ -70,6 +75,7 @@ export class ImageService {
 
       return blockBlobClient.url;
     } catch (error) {
+      console.log(error)
       throw error;
     }
   }

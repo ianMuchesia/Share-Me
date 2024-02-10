@@ -28,11 +28,14 @@ export type AccessTokenType = {
     access_token: string;
     email: string;
     username: string;
-    profileImg: string|null;
+    profilepic: string|null;
 }
 
 
+
 export type UserMeType ={
-    email:string;
-    username:string;
+ 
+    email: string;
+    username: string;
+    profilepic: string|null;
 }

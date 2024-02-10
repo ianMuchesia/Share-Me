@@ -1,4 +1,4 @@
-import { AccessTokenType, LoginType, RegisterType } from "@/@types/auth";
+import { AccessTokenType, LoginType, RegisterType, UserMeType } from "@/@types/auth";
 import { baseUrl } from "@/lib/BaseURL";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
@@ -43,14 +43,14 @@ export const authApi = createApi({
             }),
             providesTags:['auth']
         }),
-        getme:build.query({
+        getme:build.query<UserMeType,void>({
             query:()=>({
                 url:'users/me',
                 method:'GET'
             }),
             providesTags:['auth']
-        })
-
+        }),
+      
     })
 
 })

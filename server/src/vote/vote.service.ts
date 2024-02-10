@@ -10,52 +10,78 @@ export class VoteService {
   constructor(private prisma: PrismaService) {}
 
   async createVote(userId: string, postId: string) {
-    const alreadyVoted = await this.prisma.vote.findFirst({
-      where: {
-        user_id: userId,
-        post_id: postId,
-      },
-    });
-
-    if (alreadyVoted) {
-      throw new BadRequestException('You already voted this post');
-    }
-
-    // Create the vote and increment the vote count in a single transaction
-    const result = await this.prisma.$transaction([
-      this.prisma.vote.create({
-        data: {
-          user: {
-            connect: {
-              id: userId,
+    try {
+      const alreadyVoted = await this.prisma.vote.findFirst({
+        where: {
+          user_id: userId,
+          post_id: postId,
+        },
+      });
+  
+      if (alreadyVoted) {
+        await this.prisma.$transaction([
+          this.prisma.vote.delete({
+            where: {
+              id: alreadyVoted.id,
             },
-          },
-          post: {
-            connect: {
+          }),
+          this.prisma.post.update({
+            where: {
               id: postId,
             },
-          },
-        },
-      }),
-      this.prisma.post.update({
-        where: {
-          id: postId,
-        },
-        data: {
-          voteCount: {
-            increment: 1,
-          },
-        },
-      }),
-    ]);
+            data: {
+              voteCount: {
+                decrement: 1,
+              },
+            },
+          }),
+        ]);
+  
+        return -1;
+      } else {
+        // Create the vote and increment the vote count in a single transaction
+        await this.prisma.$transaction([
+          this.prisma.vote.create({
+            data: {
+              user: {
+                connect: {
+                  id: userId,
+                },
+              },
+              post: {
+                connect: {
+                  id: postId,
+                },
+              },
+            },
+          }),
+          this.prisma.post.update({
+            where: {
+              id: postId,
+            },
+            data: {
+              voteCount: {
+                increment: 1,
+              },
+            },
+          }),
+        ]);
+  
+        // Return the created vote
+        return +1;
+      }
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new BadRequestException('Post not found');
+      }else{
+        throw new Error('Internal Server Error');
+      }
 
-    // Return the created vote
-    return result[0];
+      
+    }
   }
 
-
   async undoVote(userId: string, postId: string) {
-
     const vote = await this.prisma.vote.findFirst({
       where: {
         user_id: userId,

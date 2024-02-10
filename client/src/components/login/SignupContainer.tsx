@@ -27,42 +27,37 @@ const SignupContainer = () => {
       email: "",
       password: "",
       username: "",
-      profilepic: "",
+      confirmPassword: "",
     },
   });
 
   const [handleRegister, { isLoading, error }] = useRegisterMutation();
 
   const [imgBase64, setImgBase64] = useState<null | string>(null);
-  const [fileUrl, setFileUrl] = useState("");
 
-  const changeImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      const file = e.target.files[0];
-      const reader = new FileReader();
 
-      reader.onload = (readerEvent: ProgressEvent<FileReader>) => {
-        if (readerEvent.target?.result) {
-          setImgBase64(readerEvent.target.result.toString());
-          const fileUrl = URL.createObjectURL(file);
-          setFileUrl(fileUrl);
-        }
-      };
-
-      reader.readAsDataURL(file);
-    }
-  };
-
+ 
   const onSubmit = async (data: RegisterType) => {
+    if(data.confirmPassword !== data.password){
+      toast.error("Password and confirm password does not match");
+      return
+    }
+    if(!imgBase64){
+      toast.error("Please upload a profile picture");
+      return
+    }
+    data.profilepic = imgBase64;
     try {
       const res = await handleRegister(data).unwrap();
       
-      dispatch(login({ isAuthenticated: true, user: res }));
-      localStorage.setItem("token", JSON.stringify(res));
+      console.log(res)
+      // dispatch(login({username: data.username, email: data.email, profilepic:res.profilepic}));
+      // localStorage.setItem("token", JSON.stringify(res));
 
       toast.success("Sign up was successful");
       router.push("/");
     } catch (error: any) {
+      console.log(error)
       if (error?.data?.message) {
         toast.error(error?.data?.message);
       } else {
@@ -83,7 +78,7 @@ const SignupContainer = () => {
               <h1 className="text-3xl font-bold">Create Your Account</h1>
             </div>
             <div className="mt-5">
-              <UploadImage changeImage={changeImage} imgBase64={imgBase64} />
+              <UploadImage imgBase64={imgBase64} setImgBase64={setImgBase64} />
 
               <Input
                 register={register}

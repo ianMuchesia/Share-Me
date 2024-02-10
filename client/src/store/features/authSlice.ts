@@ -1,9 +1,9 @@
-import { AccessTokenType } from "@/@types/auth";
-import { createSlice } from "@reduxjs/toolkit";
+import { UserMeType } from "@/@types/auth";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 
 type userSliceType = {
-    user:AccessTokenType|null;
+    user:UserMeType|null;
     isAuthenticated:boolean;
     loading:boolean;
 }
@@ -20,7 +20,7 @@ const authSlice = createSlice({
     name: "auth",
     initialState: initialUserState,
     reducers: {
-        login(state, action) {
+        login(state, action:PayloadAction<UserMeType>) {
             state.user = action.payload;
             state.isAuthenticated = true;
             state.loading = false;
@@ -32,6 +32,8 @@ const authSlice = createSlice({
         },
         loading(state) {
             state.loading = true;
+            state.user = null;
+            state.isAuthenticated = false;
         },
     },
 });
