@@ -1,40 +1,46 @@
-import { PayloadAction } from '@reduxjs/toolkit';
-import { PostType } from "@/@types/post";
-import { createSlice } from "@reduxjs/toolkit"
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-interface ModalState {
-    name: string;
-    isOpen: boolean;
-    data: PostType | null;
-}
+type ModalData = {
+  image?: string;
+  prompt: string;
+  username: string;
+};
 
-interface OpenModalPayload {
-    name: string;
-    data: PostType;
-}
+type ModalSliceState = {
+  isOpen: boolean;
+  modalType: string;
+  modalData: ModalData;
+};
 
-const initialModalState: ModalState = {
-    name: "",
-    isOpen: false,
-    data: null
-}
+type OpenModalPayload = {
+  modalType: string;
+  modalData: ModalData;
+};
+
+const initialState: ModalSliceState = {
+  isOpen: false,
+  modalType: "",
+  modalData: {
+    image: "",
+    prompt: "",
+    username: "",
+  },
+};
 
 const modalSlice = createSlice({
-    name: "modal",
-    initialState: initialModalState,
-    reducers: {
-        openModal(state, action: PayloadAction<OpenModalPayload>) {
-            state.name = action.payload.name
-            state.data = action.payload.data
-            state.isOpen = true
-        },
-        closeModal(state) {
-            state.isOpen = false
-            state.data = null
-            state.name = ""
-        }
-    }
-})
+  name: "modal",
+  initialState,
+  reducers: {
+    openModal: (state, action: PayloadAction<OpenModalPayload>) => {
+      state.isOpen = true;
+      state.modalType = action.payload.modalType;
+      state.modalData = action.payload.modalData;
+    },
+    closeModal: (state) => {
+      state.isOpen = false;
+    },
+  },
+});
 
-export const { openModal, closeModal } = modalSlice.actions
-export default modalSlice.reducer 
+export const { openModal, closeModal } = modalSlice.actions;
+export default modalSlice.reducer;

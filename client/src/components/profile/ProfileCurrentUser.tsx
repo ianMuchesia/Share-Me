@@ -1,14 +1,27 @@
-import { UserType } from "@/@types/auth";
-import { Profiles } from "../home";
-import OtherPosts from "./OtherPosts";
+import { logout } from "@/store/features/authSlice";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import React from "react";
 import { toast } from "react-toastify";
 
 interface Props {
-  user: UserType;
   posts: number;
 }
-const ProfileCard = ({ user, posts }: Props) => {
+const ProfileCurrentUser = ({ posts }: Props) => {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const auth = useAppSelector((state) => state.auth);
+
+  const handleLogout = async () => {
+    await router.push("/");
+    toast.success("Logged out successfully");
+
+    localStorage.removeItem("token");
+
+    dispatch(logout());
+  };
+
   return (
     <div className="relative py-16 gradient-bg-artworks">
       <div className="container mx-auto px-4">
@@ -19,7 +32,11 @@ const ProfileCard = ({ user, posts }: Props) => {
                 <div className="relative ">
                   <Image
                     alt="profile pic"
-                    src={user.profilepic ? user.profilepic : "/user.png"}
+                    src={
+                      auth?.user?.profilepic
+                        ? auth.user.profilepic
+                        : "/user.png"
+                    }
                     className="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-[150px]"
                     width={150}
                     height={100}
@@ -31,11 +48,9 @@ const ProfileCard = ({ user, posts }: Props) => {
                   <button
                     className="bg-pink-500 active:bg-pink-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
                     type="button"
-                    onClick={() => {
-                      toast.info("Feature not implemented yet");
-                    }}
+                    onClick={handleLogout}
                   >
-                    Connect
+                    Logout
                   </button>
                 </div>
               </div>
@@ -54,7 +69,7 @@ const ProfileCard = ({ user, posts }: Props) => {
             </div>
             <div className="text-center mt-12">
               <h3 className="text-4xl font-semibold leading-normal mb-2 text-white ">
-                {user.username}
+                {auth?.user?.username}
               </h3>
               <div className="text-sm leading-normal mt-0 mb-2 text-white font-bold uppercase">
                 <i className="fas fa-map-marker-alt mr-2 text-lg text-white"></i>
@@ -74,8 +89,7 @@ const ProfileCard = ({ user, posts }: Props) => {
                 <div className="w-full lg:w-9/12 px-4">
                   <p className="mb-4 text-lg leading-relaxed text-white">
                     To create an image click on create on the navbar then you
-                    will be routed to the create page and start prompting to
-                    have your own profile like {user.username}
+                    will be routed to the create page and start prompting.
                   </p>
                 </div>
               </div>
@@ -92,4 +106,4 @@ const ProfileCard = ({ user, posts }: Props) => {
   );
 };
 
-export default ProfileCard;
+export default ProfileCurrentUser;

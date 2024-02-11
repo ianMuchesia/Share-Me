@@ -7,9 +7,7 @@ export class CreatePostDTO {
     @IsString()
     prompt: string;
 
-    @IsNotEmpty()
-    @IsString()
-    image:string;
+  
 }
 
 

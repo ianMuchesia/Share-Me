@@ -24,7 +24,6 @@ export class PostService {
             username: true,
           },
         },
-        
       },
       orderBy: {
         createdAt: 'desc',
@@ -163,22 +162,21 @@ export class PostService {
         where: {
           user_id: userid,
         },
-     
-        select:{
-          id:true,
-          prompt:true,
-          image:true,
-          voteCount:true,
-          createdAt:true,
-          updatedAt:true,
-          user:{
-            select:{
-              id:true,
-              username:true
-            }
-          }
-        }
-       
+
+        select: {
+          id: true,
+          prompt: true,
+          image: true,
+          voteCount: true,
+          createdAt: true,
+          updatedAt: true,
+          user: {
+            select: {
+              id: true,
+              username: true,
+            },
+          },
+        },
       });
 
       return posts;

@@ -1,9 +1,13 @@
-import OtherPosts from "./OtherPosts";
-import ProfileCard from "./ProfileCard";
-
+import { useAppSelector } from "@/store/hooks";
+import ProfileCurrentPosts from "./ProfileCurrentPosts";
+import ProfileCurrentUser from "./ProfileCurrentUser";
+import { useGetMyPostsQuery } from "@/store/services/postApi";
 
 const ProfileContainer = () => {
-  
+  const auth = useAppSelector((state) => state.auth);
+
+  const { data, isLoading, error } = useGetMyPostsQuery(undefined);
+
   return (
     <div className="gradient-bg-hero ">
       <div className="profile-page">
@@ -26,10 +30,26 @@ const ProfileContainer = () => {
         </div>
         {/* <ProfileCard />
         <OtherPosts /> */}
+        {isLoading && (
+          <div className="flex justify-center items-center h-96">
+            <p>Loading...</p>
+          </div>
+        )}
+        {error && (
+          <div className="flex justify-center items-center h-96 text-red-500">
+            <p>An error occured</p>
+          </div>
+        )}
+        {data && (
+          <>
+            {" "}
+            <ProfileCurrentUser posts={data.length} />
+            <ProfileCurrentPosts posts={data} />
+          </>
+        )}
       </div>
     </div>
   );
 };
-
 
 export default ProfileContainer;

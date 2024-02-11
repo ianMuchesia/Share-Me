@@ -13,7 +13,6 @@ import { login } from "@/store/features/authSlice";
 
 const SigninContainer = () => {
   const router = useRouter();
-  
 
   const dispatch = useAppDispatch();
 
@@ -28,10 +27,8 @@ const SigninContainer = () => {
     },
   });
 
-
   //this is to handle the login mutation
   const [handleLogin, { isLoading, error }] = useLoginMutation();
-
 
   //this is to redirect the user to the page they were trying to access before they were redirected to the login page
   const redirect = Array.isArray(router.query.redirect)
@@ -42,7 +39,13 @@ const SigninContainer = () => {
     try {
       const res = await handleLogin(data).unwrap();
 
-      dispatch(login({ isAuthenticated: true, user: res }));
+      dispatch(
+        login({
+          username: res.username,
+          email: res.email,
+          profilepic: res.profilepic,
+        })
+      );
       localStorage.setItem("token", JSON.stringify(res));
 
       toast.success("Sign in was successful");
@@ -55,7 +58,6 @@ const SigninContainer = () => {
       }
     }
   };
-
 
   return (
     <div className="gradient-bg-artworks p-10">

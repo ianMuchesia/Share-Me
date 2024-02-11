@@ -23,7 +23,7 @@ export class UserController {
         return {
             email:user.email,
             username:user.username,
-            profileImg:user?.profilepic
+            profilepic:user?.profilepic
         }
         
     }

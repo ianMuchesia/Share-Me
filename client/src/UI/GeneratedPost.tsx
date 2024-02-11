@@ -4,18 +4,16 @@ import { FaTimes } from "react-icons/fa";
 
 const GeneratedPost = () => {
   const dispatch = useAppDispatch();
-
   const modal = useAppSelector((state) => state.modal);
-
-  const { image, description, title, createdAt, votes } = modal.data || {};
 
   const handleClose = () => {
     dispatch(closeModal());
   };
+
   return (
     <div
       className={`fixed top-0 left-0 w-screen h-screen ${
-        modal.name === "generated" && modal.isOpen ? "flex" : "hidden"
+        modal.modalType === "generated" && modal.isOpen ? "flex" : "hidden"
       }  items-center
         justify-center bg-black bg-opacity-50 transform
         transition-transform duration-300  `}
@@ -37,14 +35,18 @@ const GeneratedPost = () => {
             <div className="shrink-0 rounded-xl overflow-hidden h-40 w-40">
               <img
                 className="h-full w-full object-cover cursor-pointer"
-                src={image}
+                src={
+                  modal.modalData.image ? modal.modalData.image : "/user.png"
+                }
               />
             </div>
           </div>
 
           <div className="flex flex-col justify-start rounded-xl mt-5">
             <h4 className="text-white font-semibold">Prompt</h4>
-            <p className="text-gray-400 text-xs my-1">{description}</p>
+            <p className="text-gray-400 text-xs my-1">
+              {modal.modalData.prompt}
+            </p>
 
             <div className="flex justify-between items-center mt-3 text-white">
               <div className="flex justify-start items-center">
@@ -61,7 +63,7 @@ const GeneratedPost = () => {
 
               <div className="flex flex-col">
                 <small className="text-xs">Current Likes</small>
-                <p className="text-sm font-semibold self-end">{votes}</p>
+                <p className="text-sm font-semibold self-end">{0}</p>
               </div>
             </div>
           </div>

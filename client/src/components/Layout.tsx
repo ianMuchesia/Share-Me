@@ -16,7 +16,7 @@ interface LayoutProps {
     return (
       <div className="min-h-screen">
         <Head>
-          <title>Land listing</title>
+          <title>Share Me</title>
         </Head>
         <header className='gradient-bg-hero'>
           <Header />

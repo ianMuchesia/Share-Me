@@ -1,7 +1,9 @@
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { FaRobot } from "react-icons/fa6";
 
 const Hero = () => {
+  const router = useRouter();
   return (
     <div
       className="flex flex-col md:flex-row w-4/5 justify-between 
@@ -23,6 +25,7 @@ const Hero = () => {
             className="shadow-xl shadow-black text-white
               bg-[#e32970] hover:bg-[#bd255f]
               rounded-full cursor-pointer py-2 px-5"
+            onClick={() => router.push("/create")}
           >
             Start Now
           </button>

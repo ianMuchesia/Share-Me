@@ -5,20 +5,19 @@ import { BiUser } from "react-icons/bi";
 import { MdOpenInNew } from "react-icons/md";
 
 interface Props {
-  user:UserType;
+  user: UserType;
 }
 
-const ProfilesCard = ({user}:Props) => {
-  
+const ProfilesCard = ({ user }: Props) => {
   return (
     <div className="flex justify-between items-center border border-pink-500 text-gray-400 w-full shadow-xl shadow-black rounded-md overflow-hidden bg-gray-800 my-2 p-3">
       <div className="rounded-md shadow-sm shadow-pink-500 p-2">
-      <Image
-      alt="profile"
-      src={user.profilepic?user.profilepic:"/user.png"}
-      width={30}
-      height={30}
-      />
+        <Image
+          alt="profile"
+          src={user.profilepic ? user.profilepic : "/user.png"}
+          width={30}
+          height={30}
+        />
       </div>
 
       <div>

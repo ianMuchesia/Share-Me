@@ -7,13 +7,12 @@ import { Provider } from "react-redux";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-     <Provider store={store}>
+    <Provider store={store}>
       <AuthLayout>
-      <Layout>
-    <Component {...pageProps} />
-    </Layout>
-    </AuthLayout>
-     </Provider>
-
-  )
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </AuthLayout>
+    </Provider>
+  );
 }

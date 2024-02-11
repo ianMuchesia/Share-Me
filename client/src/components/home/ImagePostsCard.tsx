@@ -1,4 +1,5 @@
 import { PostType } from "@/@types/post";
+import LoadingSpinner from "@/UI/LoadingSpinner";
 import UseAddVote from "@/lib/AddVote";
 import { useRouter } from "next/router";
 import { IoIosThumbsUp } from "react-icons/io";
@@ -9,8 +10,7 @@ interface ImagePostsCardProps {
 const ImagePostsCard = ({ post }: ImagePostsCardProps) => {
   const router = useRouter();
 
-
-  const {handleVote,voted,isLoading} = UseAddVote();
+  const { handleVote, voted, isLoading } = UseAddVote();
   return (
     <div className="w-full shadow-xl shadow-black rounded-md overflow-hidden bg-gray-800 my-2 p-3">
       <img
@@ -22,18 +22,27 @@ const ImagePostsCard = ({ post }: ImagePostsCardProps) => {
       <p className="text-gray-400 text-xs my-1">{post.prompt}</p>
       <div className="flex justify-between items-center mt-3 text-white">
         <div className="flex flex-col">
-        <div className="flex gap-4 items-center">
-              <p
-                className="text-sm font-semibold cursor-pointer"
-                onClick={() => handleVote(post.id)}
-              >
-                <IoIosThumbsUp
-                  size={25}
-                  className={`${voted ? "text-[#bd255f]" : "text-white"}`}
-                />
-              </p>
-              <p className="text-lg font-semibold">{post.voteCount}</p>
-            </div>
+          <div className="flex gap-4 items-center">
+            {isLoading ? (
+              <>
+                <LoadingSpinner />
+                <p className="text-lg font-semibold">...</p>
+              </>
+            ) : (
+              <>
+                <p
+                  className="text-sm font-semibold cursor-pointer"
+                  onClick={() => handleVote(post.id)}
+                >
+                  <IoIosThumbsUp
+                    size={25}
+                    className={voted ? "text-[#bd255f]" : "text-white"}
+                  />
+                </p>
+                <p className="text-lg font-semibold">{post.voteCount}</p>
+              </>
+            )}
+          </div>
           <small className="text-xs">posted by {post.user.username}</small>
         </div>
 
