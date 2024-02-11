@@ -17,11 +17,11 @@ export const postApi = createApi({
     },
   }),
   reducerPath: "postApis",
-  tagTypes: ["post","users"],
+  tagTypes: ["post", "users"],
   endpoints: (build) => ({
     createPost: build.mutation({
       query: (data) => ({
-        url: "post",
+        url: "posts",
         method: "POST",
         body: data,
       }),
@@ -37,6 +37,13 @@ export const postApi = createApi({
     getSinglePost: build.query({
       query: (id) => ({
         url: `posts/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["post"],
+    }),
+    getMyPosts: build.query({
+      query: () => ({
+        url: "posts/user",
         method: "GET",
       }),
       providesTags: ["post"],
@@ -77,14 +84,13 @@ export const postApi = createApi({
       }),
       invalidatesTags: ["post"],
     }),
-    getAllUsers:build.query<UserType[],void>({
-      query:()=>({
-          url:'users',
-          method:'GET'
+    getAllUsers: build.query<UserType[], void>({
+      query: () => ({
+        url: "users",
+        method: "GET",
       }),
-      providesTags:['users']
-  })
-
+      providesTags: ["users"],
+    }),
   }),
 });
 
@@ -97,5 +103,6 @@ export const {
   useUpdatePostMutation,
   useVotePostMutation,
   useUnVotePostMutation,
-  useGetAllUsersQuery
+  useGetAllUsersQuery,
+  useGetMyPostsQuery,
 } = postApi;

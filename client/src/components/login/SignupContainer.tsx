@@ -7,20 +7,22 @@ import { RegisterType } from "@/@types/auth";
 import Input from "./Input";
 import PasswordInput from "./PasswordInput";
 import { signupInputs } from "./AuthData";
-import { useRegisterMutation } from "@/store/services/authApi";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import { useAppDispatch } from "@/store/hooks";
+import { baseUrl } from "@/lib/BaseURL";
+import axios from "axios";
 import { login } from "@/store/features/authSlice";
 
 const SignupContainer = () => {
   const router = useRouter();
 
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
   //react-hook-form
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<RegisterType>({
     defaultValues: {
@@ -31,35 +33,48 @@ const SignupContainer = () => {
     },
   });
 
-  const [handleRegister, { isLoading, error }] = useRegisterMutation();
+  const [fileUpload, setFileUpload] = useState<null | File>(null);
 
-  const [imgBase64, setImgBase64] = useState<null | string>(null);
-
-
- 
   const onSubmit = async (data: RegisterType) => {
-    if(data.confirmPassword !== data.password){
+    if (data.confirmPassword !== data.password) {
       toast.error("Password and confirm password does not match");
-      return
+      return;
     }
-    if(!imgBase64){
+    if (!fileUpload) {
       toast.error("Please upload a profile picture");
-      return
+      return;
     }
-    data.profilepic = imgBase64;
+
+    const formData = new FormData();
+    formData.append("username", data.username);
+    formData.append("email", data.email);
+    formData.append("password", data.password);
+    formData.append("profilepic", fileUpload);
+
     try {
-      const res = await handleRegister(data).unwrap();
-      
-      console.log(res)
-      // dispatch(login({username: data.username, email: data.email, profilepic:res.profilepic}));
-      // localStorage.setItem("token", JSON.stringify(res));
+      const { data } = await axios.post(`${baseUrl}/auth/register`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      dispatch(
+        login({
+          username: data.username,
+          email: data.email,
+          profilepic: data.profilepic,
+        })
+      );
+      localStorage.setItem("token", JSON.stringify(data));
+
+      reset();
+      router.push("/");
 
       toast.success("Sign up was successful");
-      router.push("/");
     } catch (error: any) {
-      console.log(error)
-      if (error?.data?.message) {
-        toast.error(error?.data?.message);
+      console.log(error);
+      if (error?.response?.data?.message) {
+        toast.error(error?.response?.data?.message);
       } else {
         toast.error("Something went wrong");
       }
@@ -78,7 +93,10 @@ const SignupContainer = () => {
               <h1 className="text-3xl font-bold">Create Your Account</h1>
             </div>
             <div className="mt-5">
-              <UploadImage imgBase64={imgBase64} setImgBase64={setImgBase64} />
+              <UploadImage
+                fileUpload={fileUpload}
+                setFileUpload={setFileUpload}
+              />
 
               <Input
                 register={register}

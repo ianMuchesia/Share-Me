@@ -1,0 +1,5 @@
+{
+    "appService.showBuildDuringDeployPrompt": false,
+    "appService.defaultWebAppToDeploy": "undefined/subscriptions/59036aa0-3dff-434a-8e77-854f7ec7e812/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/shareMeIan",
+    "appService.deploySubpath": "."
+}

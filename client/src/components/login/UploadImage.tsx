@@ -1,25 +1,19 @@
 import Image from "next/image";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 
 interface UploadImageProps {
-  imgBase64: string | null;
-  setImgBase64: (value: string) => void;
+  fileUpload: File | null;
+  setFileUpload: (value: File) => void;
 }
+
 const UploadImage = (props: UploadImageProps) => {
+  const [fileUrl, setFileUrl] = useState<string | null>(null);
+
   const changeImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
-      const reader = new FileReader();
-
-      reader.onload = (readerEvent: ProgressEvent<FileReader>) => {
-        if (readerEvent.target?.result) {
-          props.setImgBase64(readerEvent.target.result.toString());
-          // const fileUrl = URL.createObjectURL(file);
-          // setFileUrl(fileUrl);
-        }
-      };
-
-      reader.readAsDataURL(file);
+      props.setFileUpload(file);
+      setFileUrl(URL.createObjectURL(file));
     }
   };
 
@@ -30,7 +24,7 @@ const UploadImage = (props: UploadImageProps) => {
           <Image
             alt="NFT"
             className="h-full w-full object-cover"
-            src={props.imgBase64 || "/user.png"}
+            src={fileUrl || "/user.png"}
             width={144}
             height={144}
           />

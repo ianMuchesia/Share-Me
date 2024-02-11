@@ -1,21 +1,26 @@
 import { Hero, ImagePosts, Profiles } from "@/components/home";
-
+import Head from "next/head";
 
 export default function Home() {
   return (
-    <main
-      
-    >
-    <div className="gradient-bg-hero">
+    <main>
+      <Head>
+        <title>Home Page</title>
+        <meta
+          name="description"
+          content="This is the home page of my website."
+        />
+    
+        <link rel="icon" href="/Designer-removebg.png" />
+      </Head>
+      <div className="gradient-bg-hero"></div>
 
-    </div>
-
-    <div className=" gradient-bg-hero">
+      <div className=" gradient-bg-hero">
         {/* <Header /> */}
         <Hero />
       </div>
-     <ImagePosts/>
-     <Profiles/>
+      <ImagePosts />
+      <Profiles />
     </main>
   );
 }

@@ -4,39 +4,31 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 
-
-
-
 @Injectable()
-export class JwtStrategy extends PassportStrategy(
-  Strategy,
-  'jwt'
-) {
-  constructor(config: ConfigService, private prisma: PrismaService) {
+export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
+  constructor(
+    config: ConfigService,
+    private prisma: PrismaService,
+  ) {
     super({
-        jwtFromRequest:ExtractJwt.fromAuthHeaderAsBearerToken(),
-        secretOrKey: config.get('JWT_SECRET'),
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      secretOrKey: config.get('JWT_SECRET'),
     });
   }
 
-
-  async validate(payload:{userId:string;email:string;username:string}){
-  
-    
+  async validate(payload: { userId: string; email: string; username: string }) {
     const user = await this.prisma.user.findUnique({
-      where:{
-        id:payload.userId,
-      }
-    })
+      where: {
+        id: payload.userId,
+      },
+    });
 
-    if(!user){
-      throw new ForbiddenException("Access to this resource is forbidden")
+    if (!user) {
+      throw new ForbiddenException('Access to this resource is forbidden');
     }
 
     delete user.password;
-    delete user.internal_id
-    return user
+    delete user.internal_id;
+    return user;
   }
-
- 
 }

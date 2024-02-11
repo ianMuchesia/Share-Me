@@ -17,18 +17,28 @@ export class AuthService {
     private imageService: ImageService,
   ) {}
 
-  async signup(dto: AuthDto) {
+  async signup(dto: AuthDto,file?: Express.Multer.File) {
     try {
+
+      const userExists = await this.prisma.user.findFirst({
+        where: {
+          email: dto.email,
+        },
+      });
+
+      if (userExists) {
+        throw new BadRequestException('User already exists');
+      }
+
+
       const hashedPassword = await argon.hash(dto.password);
 
       let profilepic = null;
 
       //azure function expects a base64 string inside an object of name body.image
-      if (dto.profilepic) {
-        const body = { image: dto.profilepic };
-
-        profilepic = await this.imageService.saveImageToAzure(
-          body,
+      if (file) {
+        profilepic = await this.imageService.saveProfileImageToAzure(
+          file,
           dto.username,
         );
       }
@@ -88,6 +98,7 @@ export class AuthService {
         username: user.username,
         email: user.email,
         userId: user.id,
+        profilepic:user.profilepic
       };
 
       const secret = this.config.get<string>('JWT_SECRET');
@@ -101,7 +112,7 @@ export class AuthService {
         access_token: token,
         email: user.email,
         username: user.username,
-        profileImg: user.profilepic,
+        profilepic: user.profilepic,
       };
     } catch (error) {
       throw error;

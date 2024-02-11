@@ -12,8 +12,7 @@ interface Props {
 const NavbarContainer = ({ toggleMenu, isOpen }: Props) => {
   const [navbar, setNavbar] = useState(false);
 
-
-    // change navbar height on scroll
+  // change navbar height on scroll
   useEffect(() => {
     const changeHeight = () => {
       if (window.scrollY > 100) {
@@ -56,7 +55,10 @@ const NavbarContainer = ({ toggleMenu, isOpen }: Props) => {
           </div>
 
           {/* menu bar */}
-          <div className={`md:hidden ${isOpen ? "hidden":"block"}`} onClick={toggleMenu}>
+          <div
+            className={`md:hidden ${isOpen ? "hidden" : "block"}`}
+            onClick={toggleMenu}
+          >
             <CiMenuFries className="text-white text-2xl font-bold" />
           </div>
 

@@ -27,19 +27,13 @@ const OtherPostsCard = ({ post }: Props) => {
           <div className="flex flex-col">
             <small className="text-xs">{formatDate(post.createdAt)}</small>
             <div className="flex gap-4 items-center">
-              <p
-                className="text-sm font-semibold cursor-pointer"
-                onClick={() => handleVote(post.id)}
-              >
-                <IoIosThumbsUp
-                  size={25}
-                  className={`${voted ? "text-[#bd255f]" : "text-white"}`}
-                />
-              </p>
+
+            <p className="text-sm font-semibold">Votes</p>
+             
+            
               <p className="text-lg font-semibold">{post.voteCount}</p>
             </div>
 
-            <p className="text-sm font-semibold">Vote</p>
           </div>
         </div>
       </div>
