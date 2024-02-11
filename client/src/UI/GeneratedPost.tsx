@@ -1,5 +1,6 @@
 import { closeModal } from "@/store/features/modalSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import Image from "next/image";
 import { FaTimes } from "react-icons/fa";
 
 const GeneratedPost = () => {
@@ -33,11 +34,14 @@ const GeneratedPost = () => {
 
           <div className="flex flex-row justify-center items-center rounded-xl mt-5">
             <div className="shrink-0 rounded-xl overflow-hidden h-40 w-40">
-              <img
+              <Image
                 className="h-full w-full object-cover cursor-pointer"
                 src={
                   modal.modalData.image ? modal.modalData.image : "/user.png"
                 }
+                height={100}
+                alt="Generated Image"
+                width={100}
               />
             </div>
           </div>

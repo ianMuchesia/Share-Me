@@ -8,7 +8,7 @@ import { NextPage } from "next";
 //higher oredr component to check if user is authenticated
 //if not redirect to signin page
 const withAuth = (WrappedComponent: ComponentType | NextPage) => {
-  return (props: any) => {
+  const WithAuthComponent = (props: any) => {
     const Router = useRouter();
     const user = useAppSelector((state) => state.auth);
 
@@ -19,10 +19,20 @@ const withAuth = (WrappedComponent: ComponentType | NextPage) => {
       if (user.isAuthenticated === false) {
         Router.replace("/signin");
       }
-    }, [user]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [user.isAuthenticated]);
 
     return <WrappedComponent {...props} />;
   };
-};
+
+  WithAuthComponent.displayName = `WithAuth(${getDisplayName(WrappedComponent)})`;
+
+  return WithAuthComponent;
+}
+
+function getDisplayName(WrappedComponent: ComponentType | NextPage) {
+  return WrappedComponent.displayName || WrappedComponent.name || 'Component';
+}
+
 
 export default withAuth;

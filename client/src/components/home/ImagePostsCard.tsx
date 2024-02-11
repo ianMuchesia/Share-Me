@@ -1,6 +1,7 @@
 import { PostType } from "@/@types/post";
 import LoadingSpinner from "@/UI/LoadingSpinner";
 import UseAddVote from "@/lib/AddVote";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { IoIosThumbsUp } from "react-icons/io";
 
@@ -13,9 +14,11 @@ const ImagePostsCard = ({ post }: ImagePostsCardProps) => {
   const { handleVote, voted, isLoading } = UseAddVote();
   return (
     <div className="w-full shadow-xl shadow-black rounded-md overflow-hidden bg-gray-800 my-2 p-3">
-      <img
+      <Image
         src={post.image}
         alt={"picture"}
+        height={100}
+        width={100}
         className="h-60 w-full object-cover shadow-lg shadow-black rounded-lg mb-3"
       />
       <h4 className="text-white font-semibold">Prompt</h4>
