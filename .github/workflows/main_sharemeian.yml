@@ -35,5 +35,5 @@ jobs:
         with:
           app-name: 'ShareMeIan'
           slot-name: 'Production'
-          package: .
+          package: ./server
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_77544E61854D434E9FCF4EA2E3A34629 }}
