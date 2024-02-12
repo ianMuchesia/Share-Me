@@ -13,7 +13,7 @@ The project is divided into two main directories:
 
 ## Images
 
-Here are some images of our project:
+Here are some images of the project:
 
 ![Project Diagram](images/project-diagram.png)
 ![User Interface Screenshot](images/ui-screenshot.png)
