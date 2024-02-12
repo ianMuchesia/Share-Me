@@ -7,6 +7,7 @@ const Navbar = () => {
 
     const toggleMenu = ()=>{
         setIsOpen((isOpen)=>!isOpen)
+		
     }
 
     useEffect(() => {

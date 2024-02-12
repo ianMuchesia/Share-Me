@@ -16,6 +16,8 @@ const overLayStyles = "fixed inset-0 bg-black/30 md:hidden min-h-screen";
 const MobileNavbar = ({ onToggleMenu, isMenuOpen }: Props) => {
   const router = useRouter();
   const auth = useAppSelector((state) => state.auth);
+  
+
   return (
     <>
       <div
@@ -32,11 +34,11 @@ const MobileNavbar = ({ onToggleMenu, isMenuOpen }: Props) => {
             <IoIosClose className="text-8xl text-white" />
           </div>
           {/* navlinks */}
-          <Navlinks styles="flex flex-col space-y-5 flex-1 justify-evenly w-full" />
+          <Navlinks styles="flex flex-col space-y-5 flex-1 justify-evenly w-full"  onToggleMenu={onToggleMenu}/>
           {auth.isAuthenticated === false && (
             <button
               className="py-4 px-[50px] text-sm bg-gray-800 text-white"
-              onClick={() => router.push("/signin")}
+              onClick={async() => {await router.push("/signin");onToggleMenu();}}
             >
               Login
             </button>

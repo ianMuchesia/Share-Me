@@ -12,25 +12,25 @@ interface Props {
 const NavbarContainer = ({ toggleMenu, isOpen }: Props) => {
   const [navbar, setNavbar] = useState(false);
 
-  // change navbar height on scroll
-  useEffect(() => {
-    const changeHeight = () => {
-      if (window.scrollY > 100) {
-        setNavbar(true);
-      } else {
-        setNavbar(false);
-      }
-    };
+  // // change navbar height on scroll
+  // useEffect(() => {
+  //   const changeHeight = () => {
+  //     if (window.scrollY > 100) {
+  //       setNavbar(true);
+  //     } else {
+  //       setNavbar(false);
+  //     }
+  //   };
 
-    const onScroll = setTimeout(() => {
-      window.addEventListener("scroll", changeHeight);
-    }, 500);
+  //   const onScroll = setTimeout(() => {
+  //     window.addEventListener("scroll", changeHeight);
+  //   }, 500);
 
-    return () => {
-      clearTimeout(onScroll);
-      window.removeEventListener("scroll", changeHeight);
-    };
-  }, []);
+  //   return () => {
+  //     clearTimeout(onScroll);
+  //     window.removeEventListener("scroll", changeHeight);
+  //   };
+  // }, []);
 
   return (
     <>
