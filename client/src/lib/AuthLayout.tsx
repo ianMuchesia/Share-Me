@@ -23,7 +23,7 @@ const AuthLayout = ({ children }: AuthLayoutProps) => {
       dispatch(logout());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  }, [data,isLoading]);
 
   return <div>{children}</div>;
 };

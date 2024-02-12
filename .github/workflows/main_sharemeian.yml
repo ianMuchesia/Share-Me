@@ -14,26 +14,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Print Hello World
+        run: echo "Hello World"
 
-      - name: Set up Node.js version
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18.x'
+    # steps:
+    #   - uses: actions/checkout@v4
 
-      - name: npm install, build, and test
-        run: |
-          cd server
-          npm install -g @nestjs/cli
-          npm install
-          npm run build
+    #   - name: Set up Node.js version
+    #     uses: actions/setup-node@v3
+    #     with:
+    #       node-version: '18.x'
+
+    #   - name: npm install, build, and test
+    #     run: |
+    #       cd server
+    #       npm install -g @nestjs/cli
+    #       npm install
+    #       npm run build
         
       
-      - name: 'Deploy to Azure Web App'
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: 'ShareMeIan'
-          slot-name: 'Production'
-          package: ./server
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_77544E61854D434E9FCF4EA2E3A34629 }}
+    #   - name: 'Deploy to Azure Web App'
+    #     id: deploy-to-webapp
+    #     uses: azure/webapps-deploy@v2
+    #     with:
+    #       app-name: 'ShareMeIan'
+    #       slot-name: 'Production'
+    #       package: ./server
+          # publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_77544E61854D434E9FCF4EA2E3A34629 }}

@@ -60,7 +60,7 @@ const SigninContainer = () => {
   };
 
   return (
-    <div className="gradient-bg-artworks p-10">
+    <div className="gradient-bg-artworks md:p-10">
       <div className="relative py-3 sm:max-w-xl sm:mx-auto">
         <form
           onSubmit={handleSubmit(onSubmit)}
